@@ -115,6 +115,20 @@ function createBot() {
   bot.once('spawn', () => {
     console.log(`Bot "${bot.username}" spawned in the world.`);
     io.emit('bot_status', `Bot ${bot.username} spawned. Anti-AFK active.`);
+    
+    // ===== AUTO-LOGIN FOR LOGINSECURITY =====
+    const botPassword = process.env.BOT_PASSWORD;
+    if (botPassword) {
+      console.log(`Attempting auto-login for LoginSecurity...`);
+      setTimeout(() => {
+        bot.chat(`/login ${botPassword}`);
+        console.log(`Login command sent for ${bot.username}.`);
+      }, 3000);
+    } else {
+      console.log('⚠️ BOT_PASSWORD not set. Bot may not be able to login.');
+    }
+    // ===== END AUTO-LOGIN =====
+    
     startAntiAfk();
   });
 
